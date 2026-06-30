@@ -2,10 +2,9 @@
 set_io clk 35
 
 #IMU I2C BNO055
-
+#in
 #SDA to PMOD1A-10
 set_io SDA_i 44
-set_io SDA_o 43
 
 #SCL to PMOD1A-09
 set_io SCL_i 46
@@ -13,6 +12,15 @@ set_io SCL_i 46
 #RST to PMOD1A-08
 set_io RST_i 48
 
+#out
+#PMOD1b-01
+set_io SDA_o 43
+
+#PMOD1b-02
+set_io SCL_o 38
+
+#PMOD1b-03
+set_io RST_o 34
 
 # RGB LED DRIVER
 set_io LED_RED_o 39
