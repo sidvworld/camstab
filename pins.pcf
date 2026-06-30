@@ -1,13 +1,16 @@
-#IMU I2C BNO055
+# icebreaker clock
+set_io clk 35
+
+IMU I2C BNO055
 
 #SDA to PMOD1A-10
 set_io SDA_i 44
 
 #SCL to PMOD1A-09
-set_io SDA_i 46
+set_io SCL_i 46
 
 # to RST PMOD1A-08
-set_io SDA_i 48
+set_io RST_i 48
 
 
 # RGB LED DRIVER
