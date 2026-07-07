@@ -26,33 +26,44 @@ module pd_controller
     wire [31:0] kd_term_y;
     wire [31:0] kd_term_z;
     
-    out_x_r reg [15:0];
-    out_y_r reg [15:0];
-    out_z_r reg [15:0];
+    reg [15:0] out_x_r;
+    reg [15:0] out_y_r;
+    reg [15:0] out_z_r;
 
-    multiplier_16x16 mult_kpx(.M(KP), .Q(err_x_i), .product(kp_term_x));
-    multiplier_16x16 mult_kpy(.M(KP), .Q(err_y_i), .product(kp_term_y));
-    multiplier_16x16 mult_kpz(.M(KP), .Q(err_z_i), .product(kp_term_z));
+    Booth_Multiplier mult_kpx (.clk(clk), .rst(rst_i), .M(KP), .Q(err_x_i), .product(kp_term_x));
+    Booth_Multiplier mult_kpy (.clk(clk), .rst(rst_i), .M(KP), .Q(err_y_i), .product(kp_term_y));
+    Booth_Multiplier mult_kpz (.clk(clk), .rst(rst_i), .M(KP), .Q(err_z_i), .product(kp_term_z));
 
-    multiplier_16x16 mult_kdx(.M(KD), .Q(gyro_x_i), .product(kd_term_x));
-    multiplier_16x16 mult_kdy(.M(KD), .Q(gyro_y_i), .product(kd_term_y));
-    multiplier_16x16 mult_kdz(.M(KD), .Q(gyro_z_i), .product(kd_term_z));
+    Booth_Multiplier mult_kdx (.clk(clk), .rst(rst_i), .M(KD), .Q(gyro_x_i), .product(kd_term_x));
+    Booth_Multiplier mult_kdy (.clk(clk), .rst(rst_i), .M(KD), .Q(gyro_y_i), .product(kd_term_y));
+    Booth_Multiplier mult_kdz (.clk(clk), .rst(rst_i), .M(KD), .Q(gyro_z_i), .product(kd_term_z));
 
     always @(posedge clk)
     begin
-    if (rst_i)
-        out_x_r <= 0;
-        out_y_r <= 0;
-        out_z_r <= 0;
-
-    else
-        out_x_r <= (kp_term_x) - (kd_term_x);
-        out_y_r <= (kp_term_y) - (kd_term_y);
-        out_z_r <= (kp_term_z) - (kd_term_z);
+        if (rst_i)
+        begin
+            out_x_r <= 0;
+            out_y_r <= 0;
+            out_z_r <= 0;
+        end
+        else
+        begin
+            out_x_r <= (kp_term_x) - (kd_term_x);
+            out_y_r <= (kp_term_y) - (kd_term_y);
+            out_z_r <= (kp_term_z) - (kd_term_z);
+        end
     end
 
     assign out_x_o = out_x_r;
     assign out_y_o = out_y_r;
     assign out_z_o = out_z_r;
+
+    `ifdef COCOTB_SIM
+    initial begin
+    $dumpfile ("pd_controller.vcd");
+    $dumpvars (0, pd_controller);
+    #1;
+    end
+    `endif
 
 endmodule
