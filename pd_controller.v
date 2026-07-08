@@ -1,42 +1,42 @@
 module pd_controller
-    #(parameter [15:0] KP = 10,
-    parameter [15:0] KD = 2)
+    #(parameter [7:0] KP = 10,
+    parameter [7:0] KD = 2)
     (
     input clk,
     input rst_i,
 
-    input [15:0] err_x_i,
-    input [15:0] err_y_i,
-    input [15:0] err_z_i,
+    input [7:0] err_x_i,
+    input [7:0] err_y_i,
+    input [7:0] err_z_i,
 
-    input [15:0] gyro_x_i,
-    input [15:0] gyro_y_i,
-    input [15:0] gyro_z_i,
+    input [7:0] gyro_x_i,
+    input [7:0] gyro_y_i,
+    input [7:0] gyro_z_i,
 
     output [15:0] out_x_o,
     output [15:0] out_y_o,
     output [15:0] out_z_o
 );
 
-    wire [31:0] kp_term_x;
-    wire [31:0] kp_term_y;
-    wire [31:0] kp_term_z;
+    wire [15:0] kp_term_x;
+    wire [15:0] kp_term_y;
+    wire [15:0] kp_term_z;
 
-    wire [31:0] kd_term_x;
-    wire [31:0] kd_term_y;
-    wire [31:0] kd_term_z;
+    wire [15:0] kd_term_x;
+    wire [15:0] kd_term_y;
+    wire [15:0] kd_term_z;
     
     reg [15:0] out_x_r;
     reg [15:0] out_y_r;
     reg [15:0] out_z_r;
 
-    Booth_Multiplier mult_kpx (.clk(clk), .rst(rst_i), .M(KP), .Q(err_x_i), .product(kp_term_x));
-    Booth_Multiplier mult_kpy (.clk(clk), .rst(rst_i), .M(KP), .Q(err_y_i), .product(kp_term_y));
-    Booth_Multiplier mult_kpz (.clk(clk), .rst(rst_i), .M(KP), .Q(err_z_i), .product(kp_term_z));
+    mult8bs mult_kpx (.a(KP), .b(err_x_i), .out(kp_term_x));
+    mult8bs mult_kpy (.a(KP), .b(err_y_i), .out(kp_term_y));
+    mult8bs mult_kpz (.a(KP), .b(err_z_i), .out(kp_term_z));
 
-    Booth_Multiplier mult_kdx (.clk(clk), .rst(rst_i), .M(KD), .Q(gyro_x_i), .product(kd_term_x));
-    Booth_Multiplier mult_kdy (.clk(clk), .rst(rst_i), .M(KD), .Q(gyro_y_i), .product(kd_term_y));
-    Booth_Multiplier mult_kdz (.clk(clk), .rst(rst_i), .M(KD), .Q(gyro_z_i), .product(kd_term_z));
+    mult8bs mult_kdx (.a(KD), .b(gyro_x_i), .out(kd_term_x));
+    mult8bs mult_kdy (.a(KD), .b(gyro_y_i), .out(kd_term_y));
+    mult8bs mult_kdz (.a(KD), .b(gyro_z_i), .out(kd_term_z));    
 
     always @(posedge clk)
     begin
