@@ -1,0 +1,31 @@
+set_io -nowarn i_clk 35
+
+# GREEN
+set_io -nowarn o_init_done 40
+
+# RED
+set_io -nowarn o_chip_id_error 39
+
+# BLUE
+set_io -nowarn o_nack_error 41
+
+#LED 1 PMOD2
+set_io -nowarn o_roll_valid 27
+
+#LED 2 PMOD2
+set_io -nowarn o_gyro_x_valid 25
+
+# P1A1
+set_io -nowarn reset_n        4
+
+#P1A2
+set_io -nowarn scl_o        2
+
+#P1A3
+set_io -nowarn sda_o       47
+
+#P1B1
+set_io -nowarn o_roll_msb[0] 43
+
+#P1B2
+set_io -nowarn o_roll_msb[1] 38

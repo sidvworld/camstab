@@ -1,0 +1,29 @@
+
+set_io clk      35
+
+# Reset button
+set_io rst_i    10
+
+# Enable switch
+set_io test1     20
+set_io test2     19
+set_io test3    18
+
+set_io -nowarn LEDR 11
+
+#1
+set_io seg[0] 4
+#2
+set_io seg[1] 2
+#3
+set_io seg[2] 47
+#4
+set_io seg[3] 45
+#5
+set_io seg[4] 3
+#6
+set_io seg[5] 48
+#7
+set_io seg[6] 46
+#8
+set_io seg[7] 44
